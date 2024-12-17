@@ -10,18 +10,16 @@ const recipeSubmitBtn = document.querySelector(
 const addIngredientRowTemplate = document.querySelector(
   "[data-form-ingredient]"
 );
-let recipeObject = {};
 
 addIngredientBtn.addEventListener("click", () => {
   const addIngredientRow = addIngredientRowTemplate.content.cloneNode(true);
   recipeForm.appendChild(addIngredientRow);
 });
-
+let recipeList = {};
 recipeSubmitBtn.addEventListener("click", (_) => {
   const recipeName = document.querySelector("[data-form-name]").value;
-  console.log(recipeName);
   const recipeCalories = document.querySelector("[data-form-calories]").value;
-  console.log(recipeCalories);
-  recipeObject[recipeName] += recipeCalories;
-  console.log(recipeObject);
+  let recipeObject = { calories: recipeCalories };
+  recipeList[recipeName] = recipeObject;
+  console.log(recipeList);
 });
