@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Submit recipe</title>
+  </head>
+  <body>
+    <form action="" data-form>
+      <label for="recipeName">Recipe Name</label>
+      <input type="text" name="recipeName" data-form-name />
+      <label for="recipeCalories">Recipe Calories</label>
+      <input type="number" name="recipeCalories" data-form-calories />
+      <div data-ingredient-container>
+        <!-- Ingredient rows will be added here -->
+      </div>
+      <div>
+        <button type="button" data-form-addIngredientBtn>Add Ingredient</button>
+        <button type="button" data-form-submitIngredientBtn>Submit</button>
+      </div>
+    </form>
+    <template data-form-ingredient>
+      <div data-form-ingredientRow-container>
+        <label for="ingredientName">Ingredient</label>
+        <input type="text" name="ingredientName" data-form-ingredientName />
+        <label for="ingredientCount">Ingredient count</label>
+        <input type="number" name="ingredientCount" data-form-ingredientCount />
+        <select name="ingredientSelect" id="ingredientSelect">
+          <option value="g">G</option>
+          <option value="vnt">VNT</option>
+          <option value="ml">ML</option>
+        </select>
+        <button
+          type="button"
+          onclick="return this.parentNode.remove();"
+          data-form-removeIngredientBtn
+        >
+          Remove
+        </button>
+      </div>
+    </template>
+  </body>
+</html>
