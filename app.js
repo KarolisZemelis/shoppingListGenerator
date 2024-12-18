@@ -10,8 +10,10 @@ const addIngredientRowTemplate = document.querySelector(
   "[data-form-ingredient]"
 );
 let recipeList = {};
-function formIngredients(ingredients) {
-  let ingredientObject = [];
+function formIngredientObject(ingredients) {
+  console.log("test");
+  let ingredientObject = []; // Array to hold all ingredient data
+
   ingredients.forEach((row) => {
     let ingredientName = row
       .querySelector("[data-form-ingredientName]")
@@ -20,11 +22,17 @@ function formIngredients(ingredients) {
       .querySelector("[data-form-ingredientCount]")
       .value.trim();
     let ingredientUnit = row.querySelector("#ingredientSelect").value;
-    ingredientObject.push(ingredientName);
-    ingredientObject.push(ingredientCount);
-    ingredientObject.push(ingredientUnit);
-    return ingredientObject;
+
+    // Create an object for this ingredient
+    ingredientObject.push({
+      name: ingredientName,
+      count: ingredientCount,
+      unit: ingredientUnit,
+    });
   });
+
+  console.log("Ingredient Object:", ingredientObject);
+  return ingredientObject; // Return the array of ingredient objects
 }
 
 addIngredientBtn.addEventListener("click", () => {
@@ -38,8 +46,17 @@ recipeSubmitBtn.addEventListener("click", (_) => {
   const recipeIngredients = document.querySelectorAll(
     "[data-form-ingredientRow-container]"
   );
-  formIngredients(recipeIngredients);
-  let recipeObject = { calories: recipeCalories };
+  console.log(
+    "kvieciu funkcija eventlisteneryje",
+    formIngredientObject(recipeIngredients)
+  );
+  let ingredients = formIngredientObject(recipeIngredients);
 
+  let recipeObject = {
+    calories: recipeCalories,
+    ingredients: ingredients,
+  };
   recipeList[recipeName] = recipeObject;
+  console.log(recipeList);
+  console.log(recipeList.burito);
 });
