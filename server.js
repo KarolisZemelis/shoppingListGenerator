@@ -73,6 +73,32 @@ app.get("/api/recipes", (req, res) => {
   });
 });
 
+// GET route to fetch all recipes
+app.get("/api/recipes", (req, res) => {
+  fs.readFile(
+    path.join(__dirname, "data/recipes.json"),
+    "utf8",
+    (err, data) => {
+      if (err) {
+        console.error("Error reading the file:", err);
+        return res.status(500).send({ message: "Server error" });
+      }
+
+      let recipes = [];
+      if (data) {
+        try {
+          recipes = JSON.parse(data); // Parse the JSON data
+        } catch (err) {
+          console.error("Error parsing JSON:", err);
+          return res.status(500).send({ message: "Invalid JSON format" });
+        }
+      }
+
+      res.status(200).json(recipes); // Send the recipes as JSON response
+    }
+  );
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
