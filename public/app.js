@@ -11,6 +11,29 @@ const addIngredientRowTemplate = document.querySelector(
 );
 let recipeList = {};
 
+const submitRecipe = (recipe) => {
+  fetch("http://localhost:3000/api/recipes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(recipe),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Failed to save the recipe.");
+      }
+    })
+    .then((data) => {
+      console.log(data.message);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 function formIngredientObject(ingredients) {
   let ingredientObject = []; // Array to hold all ingredient data
 
@@ -55,5 +78,6 @@ recipeSubmitBtn.addEventListener("click", (_) => {
     ingredients: ingredients,
   };
   recipeList[recipeName] = recipeObject;
+  submitRecipe(recipeObject);
 });
 console.log(recipeList);
