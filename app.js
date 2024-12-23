@@ -10,8 +10,8 @@ const addIngredientRowTemplate = document.querySelector(
   "[data-form-ingredient]"
 );
 let recipeList = {};
+
 function formIngredientObject(ingredients) {
-  console.log("test");
   let ingredientObject = []; // Array to hold all ingredient data
 
   ingredients.forEach((row) => {
@@ -31,7 +31,6 @@ function formIngredientObject(ingredients) {
     });
   });
 
-  console.log("Ingredient Object:", ingredientObject);
   return ingredientObject; // Return the array of ingredient objects
 }
 
@@ -42,21 +41,19 @@ addIngredientBtn.addEventListener("click", () => {
 
 recipeSubmitBtn.addEventListener("click", (_) => {
   const recipeName = document.querySelector("[data-form-name]").value;
+  const recipeType = document.querySelector("[data-form-type]").value;
   const recipeCalories = document.querySelector("[data-form-calories]").value;
   const recipeIngredients = document.querySelectorAll(
     "[data-form-ingredientRow-container]"
   );
-  console.log(
-    "kvieciu funkcija eventlisteneryje",
-    formIngredientObject(recipeIngredients)
-  );
+
   let ingredients = formIngredientObject(recipeIngredients);
 
   let recipeObject = {
+    type: recipeType,
     calories: recipeCalories,
     ingredients: ingredients,
   };
   recipeList[recipeName] = recipeObject;
-  console.log(recipeList);
-  console.log(recipeList.burito);
 });
+console.log(recipeList);
