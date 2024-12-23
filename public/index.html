@@ -29,7 +29,7 @@
       </div>
     </form>
     <h2>All Recipes</h2>
-    <ul id="recipe-list"></ul>
+    <div id="recipe-list"></div>
     <template data-form-ingredient>
       <div data-form-ingredientRow-container>
         <label for="ingredientName">Ingredient</label>
@@ -48,6 +48,14 @@
         >
           Remove
         </button>
+      </div>
+    </template>
+    <template data-render-recipe>
+      <div class="recipeContainer" data-recipe-container>
+        <p>Pavadinimas: <span data-recipe-name></span></p>
+        <p>Tipas: <span data-recipe-type></span></p>
+        <p>Kalorijos: <span data-recipe-calories></span></p>
+        <div class="ingredientContainer" data-ingrediet-container></div>
       </div>
     </template>
   </body>
