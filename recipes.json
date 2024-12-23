@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Burito",
+    "type": "lunch",
+    "calories": "500",
+    "ingredients": [
+      {
+        "name": "Jautiena",
+        "count": "200",
+        "unit": "g"
+      },
+      {
+        "name": "Kiaušiniai",
+        "count": "3",
+        "unit": "vnt"
+      }
+    ]
+  },
+  {
+    "name": "Šakšuška",
+    "type": "breakfast",
+    "calories": "200",
+    "ingredients": [
+      {
+        "name": "Kiaušiniai",
+        "count": "300",
+        "unit": "g"
+      },
+      {
+        "name": "Pomidorukas",
+        "count": "2",
+        "unit": "vnt"
+      }
+    ]
+  }
+]

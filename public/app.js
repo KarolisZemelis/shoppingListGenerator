@@ -9,7 +9,6 @@ const recipeSubmitBtn = document.querySelector(
 const addIngredientRowTemplate = document.querySelector(
   "[data-form-ingredient]"
 );
-let recipeList = {};
 
 const submitRecipe = (recipe) => {
   fetch("http://localhost:3000/api/recipes", {
@@ -28,6 +27,7 @@ const submitRecipe = (recipe) => {
     })
     .then((data) => {
       console.log(data.message);
+      window.location.reload(); // Force reload after successful submission
     })
     .catch((error) => {
       console.error(error);
@@ -73,11 +73,11 @@ recipeSubmitBtn.addEventListener("click", (_) => {
   let ingredients = formIngredientObject(recipeIngredients);
 
   let recipeObject = {
+    name: recipeName,
     type: recipeType,
     calories: recipeCalories,
     ingredients: ingredients,
   };
-  recipeList[recipeName] = recipeObject;
+
   submitRecipe(recipeObject);
 });
-console.log(recipeList);
