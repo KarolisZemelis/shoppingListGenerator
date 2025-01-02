@@ -1,9 +1,8 @@
 const recipeBoxTemplate = document.querySelector("[data-render-recipe]");
 const recipeContainers = document.querySelectorAll("[data-recipe-container]");
 
-const editRecipe = (recipe, name, type, calories) => {
+const editRecipe = (recipe, name, type, calories, ingredients) => {
   name.innerHTML = `<input type="text" name="ingredientName" value=${recipe.name} data-form-ingredientName />`;
-  console.log("jau editinam", recipe.type);
   type.innerHTML = `
   <select name="recipeType" id="recipeType" data-form-type>
     <option value="breakfast" ${
@@ -20,6 +19,10 @@ const editRecipe = (recipe, name, type, calories) => {
     }>Vakarienė</option>
   </select>`;
   calories.innerHTML = `<input type="number" name="recipeCalories" value=${recipe.calories} data-form-calories />`;
+  ingredients.forEach((ingredient) => {
+    // ingredient.innerHTML =
+    console.log(ingredient);
+  });
 };
 
 async function fetchRecipes() {
@@ -59,8 +62,8 @@ async function fetchRecipes() {
         let type = recipeCard.querySelector("[data-recipe-type]");
         console.log(type);
         let calories = recipeCard.querySelector("[data-recipe-calories]");
-        let ingredients = recipeCard.querySelector(
-          "[data-ingredient-container]"
+        let ingredients = recipeCard.querySelectorAll(
+          "[data-ingredient-container] p"
         );
 
         editRecipe(recipe, name, type, calories, ingredients);
