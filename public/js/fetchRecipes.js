@@ -19,10 +19,8 @@ async function fetchRecipes() {
         "[data-ingredient-container]"
       );
       console.log(recipe);
-      let ingredient = document.createElement("p");
       for (i = 0; i <= recipe.ingredients.length - 1; i++) {
-        console.log("i", i);
-
+        let ingredient = document.createElement("p");
         for (const [key, value] of Object.entries(recipe.ingredients[i])) {
           ingredient.innerHTML += ` ${value}`;
         }
