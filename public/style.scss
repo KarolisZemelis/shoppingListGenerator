@@ -2,11 +2,15 @@
   display: flex;
   .recipeContainer {
     margin: 15px;
-    padding: 3px;
+    padding: 15px;
     border: 1px solid black;
     .ingredientContainer {
       display: flex;
       flex-direction: column;
+      p {
+        margin: 0;
+        padding-left: 10px;
+      }
     }
   }
 }
