@@ -7,16 +7,27 @@ async function fetchRecipes() {
     const recipeList = document.getElementById("recipe-list");
     recipeList.innerHTML = ""; // Clear previous recipes
 
-    const addRecipeBox = recipeBoxTemplate.content.cloneNode(true);
-    recipeList.appendChild(addRecipeBox);
-
     recipes.forEach((recipe) => {
-      for (i = 0; i < recipe.ingredients.length - 1; i++) {
+      const addRecipeBox = recipeBoxTemplate.content.cloneNode(true);
+      addRecipeBox.querySelector("[data-recipe-name]").textContent =
+        recipe.name;
+      addRecipeBox.querySelector("[data-recipe-type]").textContent =
+        recipe.type;
+      addRecipeBox.querySelector("[data-recipe-calories]").textContent =
+        recipe.calories;
+      let ingredientList = addRecipeBox.querySelector(
+        "[data-ingredient-container]"
+      );
+      console.log(recipe);
+      let ingredient = document.createElement("p");
+      for (i = 0; i <= recipe.ingredients.length - 1; i++) {
+        console.log("i", i);
+
         for (const [key, value] of Object.entries(recipe.ingredients[i])) {
-          // let ingredient = document.createElement("p");
-          // ingredient.innerText = `${key} : ${value}`;
-          // ingredientContainer.appendChild(ingredient);
+          ingredient.innerHTML += ` ${value}`;
         }
+        ingredientList.appendChild(ingredient);
+        recipeList.appendChild(addRecipeBox);
       }
     });
   } catch (error) {
