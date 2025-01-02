@@ -1,7 +1,7 @@
 [
   {
     "name": "Burito",
-    "type": "lunch",
+    "type": "pietūs",
     "calories": "500",
     "ingredients": [
       {
@@ -18,7 +18,7 @@
   },
   {
     "name": "Šakšuška",
-    "type": "breakfast",
+    "type": "pusryčiai",
     "calories": "200",
     "ingredients": [
       {

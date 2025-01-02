@@ -5,23 +5,51 @@ const editRecipe = (recipe, name, type, calories, ingredients) => {
   name.innerHTML = `<input type="text" name="ingredientName" value=${recipe.name} data-form-ingredientName />`;
   type.innerHTML = `
   <select name="recipeType" id="recipeType" data-form-type>
-    <option value="breakfast" ${
-      recipe.type === "breakfast" ? "selected" : ""
+    <option value="pusryčiai" ${
+      recipe.type === "pusryčiai" ? "selected" : ""
     }>Pusryčiai</option>
-    <option value="lunch" ${
-      recipe.type === "lunch" ? "selected" : ""
+    <option value="pietūs" ${
+      recipe.type === "pietūs" ? "selected" : ""
     }>Pietūs</option>
-    <option value="snack" ${
-      recipe.type === "snack" ? "selected" : ""
+    <option value="užkandis" ${
+      recipe.type === "užkandis" ? "selected" : ""
     }>Užkandis</option>
-    <option value="dinner" ${
-      recipe.type === "dinner" ? "selected" : ""
+    <option value="vakarinė" ${
+      recipe.type === "vakarinė" ? "selected" : ""
     }>Vakarienė</option>
   </select>`;
   calories.innerHTML = `<input type="number" name="recipeCalories" value=${recipe.calories} data-form-calories />`;
   ingredients.forEach((ingredient) => {
-    // ingredient.innerHTML =
-    console.log(ingredient);
+    let ingredientId = ingredient.id;
+    console.log(recipe);
+    ingredient.innerHTML = `      <div data-form-ingredientRow-container>
+       
+        <input type="text" name="ingredientName" value=${
+          recipe.ingredients[ingredientId].name
+        } data-form-ingredientName />
+        
+        <input type="number" name="ingredientCount" value=${
+          recipe.ingredients[ingredientId].count
+        } data-form-ingredientCount />
+        <select name="ingredientSelect" id="ingredientSelect" data-form-unit>
+          <option value="g" ${
+            recipe.ingredients[ingredientId].unit === "g" ? "selected" : ""
+          }>G</option>
+          <option value="vnt" ${
+            recipe.ingredients[ingredientId].unit === "vnt" ? "selected" : ""
+          }>VNT</option>
+          <option value="ml" ${
+            recipe.ingredients[ingredientId].unit === "ml" ? "selected" : ""
+          }>ML</option>
+        </select>
+        <button
+          type="button"
+          onclick="return this.parentNode.remove();"
+          data-form-removeIngredientBtn
+        >
+          Remove
+        </button>
+      </div>`;
   });
 };
 
@@ -49,6 +77,7 @@ async function fetchRecipes() {
       for (i = 0; i <= recipe.ingredients.length - 1; i++) {
         let ingredientRow = document.createElement("div");
         ingredientRow.className = "ingredientRow";
+        ingredientRow.id = i;
         for (const [key, value] of Object.entries(recipe.ingredients[i])) {
           let ingredient = document.createElement("p");
           ingredient.innerHTML += ` ${value}`;
@@ -61,12 +90,10 @@ async function fetchRecipes() {
       editButton.addEventListener("click", () => {
         let recipeCard = editButton.parentElement.parentElement;
         let name = recipeCard.querySelector("[data-recipe-name]");
-
         let type = recipeCard.querySelector("[data-recipe-type]");
-        console.log(type);
         let calories = recipeCard.querySelector("[data-recipe-calories]");
         let ingredients = recipeCard.querySelectorAll(
-          "[data-ingredient-container] p"
+          "[data-ingredient-container] div"
         );
 
         editRecipe(recipe, name, type, calories, ingredients);
