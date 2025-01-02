@@ -47,11 +47,14 @@ async function fetchRecipes() {
       const deleteButton = addRecipeBox.querySelector("[data-delete-button]");
 
       for (i = 0; i <= recipe.ingredients.length - 1; i++) {
-        let ingredient = document.createElement("p");
+        let ingredientRow = document.createElement("div");
+        ingredientRow.className = "ingredientRow";
         for (const [key, value] of Object.entries(recipe.ingredients[i])) {
+          let ingredient = document.createElement("p");
           ingredient.innerHTML += ` ${value}`;
+          ingredientRow.appendChild(ingredient);
         }
-        ingredientList.appendChild(ingredient);
+        ingredientList.appendChild(ingredientRow);
         recipeList.appendChild(addRecipeBox);
       }
 

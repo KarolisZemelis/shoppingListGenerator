@@ -1,15 +1,28 @@
 #recipe-list {
   display: flex;
   .recipeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 15px;
-    padding: 15px;
+    width: 200px;
+    padding: 20px;
     border: 1px solid black;
+    p {
+      margin: 3px;
+    }
+    input {
+      width: auto;
+    }
     .ingredientContainer {
-      display: flex;
-      flex-direction: column;
-      p {
-        margin: 0;
-        padding-left: 10px;
+      margin-top: 10px;
+      .ingredientRow {
+        display: flex;
+        p {
+          margin: 0;
+          padding-left: 5px;
+          padding-bottom: 10px;
+        }
       }
     }
   }
