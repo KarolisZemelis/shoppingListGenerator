@@ -28,6 +28,7 @@
         <button type="button" data-form-submitIngredientBtn>Submit</button>
       </div>
     </form>
+
     <h2>All Recipes</h2>
     <div id="recipe-list"></div>
     <template data-form-ingredient>
@@ -56,6 +57,10 @@
         <p>Tipas: <span data-recipe-type></span></p>
         <p>Kalorijos: <span data-recipe-calories></span></p>
         <div class="ingredientContainer" data-ingredient-container></div>
+        <div class="recipeCardButtons">
+          <button data-edit-button>Edit</button>
+          <button data-delete-button>Delete</button>
+        </div>
       </div>
     </template>
   </body>
