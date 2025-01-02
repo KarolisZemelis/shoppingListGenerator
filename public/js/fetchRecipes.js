@@ -1,33 +1,32 @@
 const recipeBoxTemplate = document.querySelector("[data-render-recipe]");
 const recipeContainers = document.querySelectorAll("[data-recipe-container]");
 
-const editRecipe = (recipe, name, type, calories, ingredients) => {
-  name.innerHTML = `<input type="text" name="ingredientName" value=${recipe.name} data-form-ingredientName />`;
+const submitSavedRecipe = () => {};
+
+const editRecipe = (recipe, name, type, calories, ingredients, editButton) => {
+  name.innerHTML = `<input type="text" name="recipeName" value=${recipe.name} data-form-newRecipeName />`;
   type.innerHTML = `
-  <select name="recipeType" id="recipeType" data-form-type>
+  <select name="recipeType" id="newRecipeType" data-form-type>
     <option value="pusryčiai" ${
-      recipe.type === "pusryčiai" ? "selected" : ""
+      recipe.type === "pusryčiai" ? "selected" : "1"
     }>Pusryčiai</option>
     <option value="pietūs" ${
-      recipe.type === "pietūs" ? "selected" : ""
+      recipe.type === "pietūs" ? "selected" : "2"
     }>Pietūs</option>
     <option value="užkandis" ${
-      recipe.type === "užkandis" ? "selected" : ""
+      recipe.type === "užkandis" ? "selected" : "3"
     }>Užkandis</option>
-    <option value="vakarinė" ${
-      recipe.type === "vakarinė" ? "selected" : ""
+    <option value="vakarienė" ${
+      recipe.type === "vakarienė" ? "selected" : "4"
     }>Vakarienė</option>
   </select>`;
-  calories.innerHTML = `<input type="number" name="recipeCalories" value=${recipe.calories} data-form-calories />`;
+  calories.innerHTML = `<input type="number" name="recipeCalories" value=${recipe.calories} data-form-newCalories />`;
   ingredients.forEach((ingredient) => {
     let ingredientId = ingredient.id;
-    console.log(recipe);
-    ingredient.innerHTML = `      <div data-form-ingredientRow-container>
-       
+    ingredient.innerHTML = `<div data-form-ingredientRow-container>
         <input type="text" name="ingredientName" value=${
           recipe.ingredients[ingredientId].name
         } data-form-ingredientName />
-        
         <input type="number" name="ingredientCount" value=${
           recipe.ingredients[ingredientId].count
         } data-form-ingredientCount />
@@ -51,6 +50,25 @@ const editRecipe = (recipe, name, type, calories, ingredients) => {
         </button>
       </div>`;
   });
+
+  const saveButton = document.createElement("button");
+  saveButton.id = "saveButton";
+  saveButton.innerText = "Save";
+
+  editButton.parentNode.replaceChild(saveButton, editButton);
+  saveButton.addEventListener("click", (event) => {
+    const newRecipeName = document.querySelector(
+      "[data-form-newRecipeName]"
+    ).value;
+    const newRecipeType = document.getElementById("newRecipeType").value;
+    const newRecipeCalories = document.querySelector(
+      "[data-form-newCalories]"
+    ).value;
+    console.log(newRecipeType);
+    console.log(newRecipeCalories);
+    console.log(newRecipeName);
+    submitSavedRecipe();
+  });
 };
 
 async function fetchRecipes() {
@@ -66,6 +84,7 @@ async function fetchRecipes() {
         recipe.name;
       addRecipeBox.querySelector("[data-recipe-type]").textContent =
         recipe.type;
+      console.log(recipe);
       addRecipeBox.querySelector("[data-recipe-calories]").textContent =
         recipe.calories;
       let ingredientList = addRecipeBox.querySelector(
@@ -89,6 +108,7 @@ async function fetchRecipes() {
 
       editButton.addEventListener("click", () => {
         let recipeCard = editButton.parentElement.parentElement;
+        console.log(recipeCard);
         let name = recipeCard.querySelector("[data-recipe-name]");
         let type = recipeCard.querySelector("[data-recipe-type]");
         let calories = recipeCard.querySelector("[data-recipe-calories]");
@@ -96,7 +116,7 @@ async function fetchRecipes() {
           "[data-ingredient-container] div"
         );
 
-        editRecipe(recipe, name, type, calories, ingredients);
+        editRecipe(recipe, name, type, calories, ingredients, editButton);
       });
 
       deleteButton.addEventListener("click", () => {
