@@ -16,6 +16,16 @@ const getData = async () => {
   }
 };
 
+const renderRecipes = async () => {
+  recipeList.innerHTML = ""; // Clear previous recipes
+  const recipes = await getData();
+  recipes.forEach((recipe) => {
+    renderRecipeBox(recipe);
+  });
+};
+
+document.addEventListener("DOMContentLoaded", renderRecipes);
+
 function renderRecipeBox(recipe) {
   const addRecipeBox = recipeBoxTemplate.content.cloneNode(true);
   addRecipeBox.querySelector("[data-recipe-name]").textContent = recipe.name;
@@ -43,7 +53,6 @@ function renderRecipeBox(recipe) {
 
   editButton.addEventListener("click", () => {
     let recipeCard = editButton.parentElement.parentElement;
-    let name = recipeCard.querySelector("[data-recipe-name]");
     let type = recipeCard.querySelector("[data-recipe-type]");
     let calories = recipeCard.querySelector("[data-recipe-calories]");
     let ingredients = recipeCard.querySelectorAll(
@@ -55,111 +64,76 @@ function renderRecipeBox(recipe) {
 
   deleteButton.addEventListener("click", () => {
     console.log(`Deleting recipe: ${recipe.name}`);
-    // addedRecipe.remove(); // Example: Remove the recipe from the DOM
+    deleteRecipe(recipe);
   });
 }
 
-const renderRecipes = async () => {
-  recipeList.innerHTML = ""; // Clear previous recipes
-  const recipes = await getData();
-  recipes.forEach((recipe) => {
-    renderRecipeBox(recipe);
-  });
-};
-
-document.addEventListener("DOMContentLoaded", renderRecipes);
-
-const submitEditedRecipe = async (newRecipe) => {
-  try {
-    const recipes = await getData(); // Fetch current recipes
-    const index = recipes.findIndex((recipe) => recipe.name === newRecipe.name);
-
-    if (index !== -1) {
-      recipes[index] = newRecipe; // Update the recipe
-      // const jsonData = JSON.stringify(recipes, null, 2); // Convert to JSON format
-
-      await submitRecipe(recipes, "Update"); // Submit JSON data
-
-      // Optionally update the UI without reloading
-      document.getElementById("recipe-list").innerHTML = ""; // Clear the current list
-      renderRecipes(recipes); // Re-render updated recipes
-
-      console.log("Recipe updated successfully.");
-    } else {
-      console.error("Recipe not found.");
-    }
-  } catch (error) {
-    console.error("Error updating recipe:", error);
-  }
-};
-
-const createInput = (type, name, value, dataAttr) => {
-  return `<input type="${type}" name="${name}" value="${value}" ${dataAttr} />`;
-};
-
-const createSelect = (name, id, options, selectedValue, dataAttr) => {
-  return `
-    <select name="${name}" id="${id}" ${dataAttr}>
-      ${options
-        .map(
-          (option) =>
-            `<option value="${option}" ${
-              option === selectedValue ? "selected" : ""
-            }>${option.charAt(0).toUpperCase() + option.slice(1)}</option>`
-        )
-        .join("")}
-    </select>`;
-};
-
-const updateIngredients = (ingredients, recipeIngredients) => {
-  ingredients.forEach((ingredient) => {
-    const ingredientId = ingredient.id;
-    const { name, count, unit } = recipeIngredients[ingredientId];
-    ingredient.innerHTML = `
-      <div data-form-ingredientRow-container>
-        ${createInput(
-          "text",
-          "ingredientName",
-          name,
-          "data-form-ingredientName"
-        )}
-        ${createInput(
-          "number",
-          "ingredientCount",
-          count,
-          "data-form-ingredientCount"
-        )}
-        ${createSelect(
-          "ingredientSelect",
-          "ingredientSelect",
-          ["g", "vnt", "ml"],
-          unit,
-          "data-form-unit"
-        )}
-        <button
-          type="button"
-          onclick="this.parentNode.remove();"
-          data-form-removeIngredientBtn
-        >
-          Remove
-        </button>
-      </div>`;
-  });
-};
-
-const replaceButton = (oldButton, newButtonText, onClickHandler) => {
-  const newButton = document.createElement("button");
-  newButton.id = "saveButton";
-  newButton.innerText = newButtonText;
-  oldButton.parentNode.replaceChild(newButton, oldButton);
-  newButton.addEventListener("click", (event) => {
-    console.log("Button clicked");
-    event.preventDefault(); // Prevent default behavior
-    onClickHandler(); // Your custom logic here
-  });
-};
-
 const editRecipe = (recipe, type, calories, ingredients, editButton) => {
+  const createInput = (type, name, value, dataAttr) => {
+    return `<input type="${type}" name="${name}" value="${value}" ${dataAttr} />`;
+  };
+
+  const createSelect = (name, id, options, selectedValue, dataAttr) => {
+    return `
+      <select name="${name}" id="${id}" ${dataAttr}>
+        ${options
+          .map(
+            (option) =>
+              `<option value="${option}" ${
+                option === selectedValue ? "selected" : ""
+              }>${option.charAt(0).toUpperCase() + option.slice(1)}</option>`
+          )
+          .join("")}
+      </select>`;
+  };
+
+  const updateIngredients = (ingredients, recipeIngredients) => {
+    ingredients.forEach((ingredient) => {
+      const ingredientId = ingredient.id;
+      const { name, count, unit } = recipeIngredients[ingredientId];
+      ingredient.innerHTML = `
+        <div data-form-ingredientRow-container>
+          ${createInput(
+            "text",
+            "ingredientName",
+            name,
+            "data-form-ingredientName"
+          )}
+          ${createInput(
+            "number",
+            "ingredientCount",
+            count,
+            "data-form-ingredientCount"
+          )}
+          ${createSelect(
+            "ingredientSelect",
+            "ingredientSelect",
+            ["g", "vnt", "ml"],
+            unit,
+            "data-form-unit"
+          )}
+          <button
+            type="button"
+            onclick="this.parentNode.remove();"
+            data-form-removeIngredientBtn
+          >
+            Remove
+          </button>
+        </div>`;
+    });
+  };
+
+  const replaceButton = (oldButton, newButtonText, onClickHandler) => {
+    const newButton = document.createElement("button");
+    newButton.id = "saveButton";
+    newButton.innerText = newButtonText;
+    oldButton.parentNode.replaceChild(newButton, oldButton);
+    newButton.addEventListener("click", (event) => {
+      console.log("Button clicked");
+      event.preventDefault(); // Prevent default behavior
+      onClickHandler(); // Your custom logic here
+    });
+  };
   type.innerHTML = createSelect(
     "recipeType",
     "newRecipeType",
@@ -205,4 +179,44 @@ const editRecipe = (recipe, type, calories, ingredients, editButton) => {
     });
     submitEditedRecipe(updatedRecipeObject);
   });
+};
+
+const submitEditedRecipe = async (newRecipe) => {
+  try {
+    const recipes = await getData(); // Fetch current recipes
+    const index = recipes.findIndex((recipe) => recipe.name === newRecipe.name);
+
+    if (index !== -1) {
+      recipes[index] = newRecipe; // Update the recipe
+
+      await submitRecipe(recipes, "Update"); // Submit JSON data
+
+      // Optionally update the UI without reloading
+      document.getElementById("recipe-list").innerHTML = ""; // Clear the current list
+      renderRecipes(recipes); // Re-render updated recipes
+
+      console.log("Recipe updated successfully.");
+    } else {
+      console.error("Recipe not found.");
+    }
+  } catch (error) {
+    console.error("Error updating recipe:", error);
+  }
+};
+
+const deleteRecipe = async (recipeToDelete) => {
+  try {
+    const recipes = await getData(); // Fetch current recipes
+    const index = recipes.findIndex(
+      (recipe) => recipe.name === recipeToDelete.name
+    );
+    recipes.splice(index, 1);
+    console.log("turetume atvaizduoti", recipes);
+    await submitRecipe(recipes, "Update");
+
+    document.getElementById("recipe-list").innerHTML = ""; // Clear the current list
+    renderRecipes(recipes);
+  } catch (error) {
+    console.error("Error deletng recipe:", error);
+  }
 };

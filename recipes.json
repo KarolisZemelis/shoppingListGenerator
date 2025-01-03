@@ -1,24 +1,12 @@
 [
   {
     "name": "Burito",
-    "type": "pusryčiai",
-    "calories": "200",
+    "type": "užkandis",
+    "calories": "1000",
     "ingredients": [
       {
-        "name": "Jautienassss",
-        "count": "200",
-        "unit": "g"
-      }
-    ]
-  },
-  {
-    "name": "Cepelinai",
-    "type": "vakarienė",
-    "calories": "200",
-    "ingredients": [
-      {
-        "name": "bulvės",
-        "count": "600",
+        "name": "Jautiena",
+        "count": "500",
         "unit": "g"
       }
     ]
