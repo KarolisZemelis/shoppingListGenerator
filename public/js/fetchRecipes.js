@@ -47,7 +47,7 @@ function renderRecipeBox(recipe) {
       "[data-ingredient-container] div"
     );
 
-    editRecipe(recipe, name, type, calories, ingredients, editButton);
+    editRecipe(recipe, type, calories, ingredients, editButton);
   });
 
   deleteButton.addEventListener("click", () => {
@@ -67,9 +67,10 @@ const renderRecipes = async () => {
 
 document.addEventListener("DOMContentLoaded", renderRecipes);
 
-const submitEditedRecipe = async () => {
+const submitEditedRecipe = async (newRecipe) => {
   const recipes = await getData();
-  console.log("submitEditedRecipe", recipes);
+  console.log("iš jasono", recipes);
+  console.log("naujas recipe", newRecipe);
 };
 
 const createInput = (type, name, value, dataAttr) => {
@@ -133,14 +134,8 @@ const replaceButton = (oldButton, newButtonText, onClickHandler) => {
   oldButton.parentNode.replaceChild(newButton, oldButton);
   newButton.addEventListener("click", onClickHandler);
 };
-const editRecipe = (recipe, name, type, calories, ingredients, editButton) => {
-  name.innerHTML = createInput(
-    "text",
-    "recipeName",
-    recipe.name,
-    "data-form-newRecipeName"
-  );
 
+const editRecipe = (recipe, type, calories, ingredients, editButton) => {
   type.innerHTML = createSelect(
     "recipeType",
     "newRecipeType",
@@ -159,80 +154,31 @@ const editRecipe = (recipe, name, type, calories, ingredients, editButton) => {
   updateIngredients(ingredients, recipe.ingredients);
 
   replaceButton(editButton, "Save", () => {
-    const newRecipeName = document.querySelector(
-      "[data-form-newRecipeName]"
-    ).value;
     const newRecipeType = document.getElementById("newRecipeType").value;
     const newRecipeCalories = document.querySelector(
       "[data-form-newCalories]"
     ).value;
+    const newRecipeIngredients = document.querySelectorAll(
+      "[data-form-ingredientrow-container]"
+    );
 
-    // Call function to handle the save logic
-    submitEditedRecipe(newRecipeName, newRecipeType, newRecipeCalories);
+    const updatedRecipeObject = {
+      name: recipe.name,
+      type: newRecipeType,
+      calories: newRecipeCalories,
+      ingredients: [],
+    };
+    newRecipeIngredients.forEach((element) => {
+      let ingredientObject = {};
+      ingredientObject.name = element.querySelector(
+        "[data-form-ingredientname]"
+      ).value;
+      ingredientObject.count = element.querySelector(
+        "[data-form-ingredientcount]"
+      ).value;
+      ingredientObject.unit = element.querySelector("[data-form-unit]").value;
+      updatedRecipeObject.ingredients.push(ingredientObject);
+    });
+    submitEditedRecipe(updatedRecipeObject);
   });
 };
-
-// const editRecipe = (recipe, name, type, calories, ingredients, editButton) => {
-//   name.innerHTML = `<input type="text" name="recipeName" value=${recipe.name} data-form-newRecipeName />`;
-//   type.innerHTML = `
-//   <select name="recipeType" id="newRecipeType" data-form-type>
-//     <option value="pusryčiai" ${
-//       recipe.type === "pusryčiai" ? "selected" : "1"
-//     }>Pusryčiai</option>
-//     <option value="pietūs" ${
-//       recipe.type === "pietūs" ? "selected" : "2"
-//     }>Pietūs</option>
-//     <option value="užkandis" ${
-//       recipe.type === "užkandis" ? "selected" : "3"
-//     }>Užkandis</option>
-//     <option value="vakarienė" ${
-//       recipe.type === "vakarienė" ? "selected" : "4"
-//     }>Vakarienė</option>
-//   </select>`;
-//   calories.innerHTML = `<input type="number" name="recipeCalories" value=${recipe.calories} data-form-newCalories />`;
-//   ingredients.forEach((ingredient) => {
-//     let ingredientId = ingredient.id;
-//     ingredient.innerHTML = `<div data-form-ingredientRow-container>
-//         <input type="text" name="ingredientName" value=${
-//           recipe.ingredients[ingredientId].name
-//         } data-form-ingredientName />
-//         <input type="number" name="ingredientCount" value=${
-//           recipe.ingredients[ingredientId].count
-//         } data-form-ingredientCount />
-//         <select name="ingredientSelect" id="ingredientSelect" data-form-unit>
-//           <option value="g" ${
-//             recipe.ingredients[ingredientId].unit === "g" ? "selected" : ""
-//           }>G</option>
-//           <option value="vnt" ${
-//             recipe.ingredients[ingredientId].unit === "vnt" ? "selected" : ""
-//           }>VNT</option>
-//           <option value="ml" ${
-//             recipe.ingredients[ingredientId].unit === "ml" ? "selected" : ""
-//           }>ML</option>
-//         </select>
-//         <button
-//           type="button"
-//           onclick="return this.parentNode.remove();"
-//           data-form-removeIngredientBtn
-//         >
-//           Remove
-//         </button>
-//       </div>`;
-//   });
-
-//   const saveButton = document.createElement("button");
-//   saveButton.id = "saveButton";
-//   saveButton.innerText = "Save";
-
-//   editButton.parentNode.replaceChild(saveButton, editButton);
-//   saveButton.addEventListener("click", (event) => {
-//     const newRecipeName = document.querySelector(
-//       "[data-form-newRecipeName]"
-//     ).value;
-//     const newRecipeType = document.getElementById("newRecipeType").value;
-//     const newRecipeCalories = document.querySelector(
-//       "[data-form-newCalories]"
-//     ).value;
-//     submitEditedRecipe();
-//   });
-// };
