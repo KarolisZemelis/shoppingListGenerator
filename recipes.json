@@ -1,35 +1,25 @@
 [
   {
     "name": "Burito",
-    "type": "pietūs",
-    "calories": "500",
+    "type": "pusryčiai",
+    "calories": "200",
     "ingredients": [
       {
-        "name": "Jautiena",
+        "name": "Jautienas",
         "count": "200",
         "unit": "g"
-      },
-      {
-        "name": "Kiaušiniai",
-        "count": "3",
-        "unit": "vnt"
       }
     ]
   },
   {
-    "name": "Šakšuška",
+    "name": "Cepelinai",
     "type": "vakarienė",
     "calories": "200",
     "ingredients": [
       {
-        "name": "Kiaušiniai",
+        "name": "bulvės",
         "count": "300",
         "unit": "g"
-      },
-      {
-        "name": "Pomidorukas",
-        "count": "2",
-        "unit": "vnt"
       }
     ]
   }

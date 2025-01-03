@@ -1,22 +1,27 @@
 const recipeBoxTemplate = document.querySelector("[data-render-recipe]");
 const recipeContainers = document.querySelectorAll("[data-recipe-container]");
 const recipeList = document.getElementById("recipe-list");
+import submitRecipe from "./utils.js";
 
-async function getData() {
+const getData = async () => {
   try {
-    const response = await fetch("/api/recipes");
-    const recipes = await response.json();
-    return recipes;
+    const response = await fetch("http://localhost:3000/api/recipes");
+    if (!response.ok) {
+      throw new Error("Failed to fetch data.");
+    }
+    return await response.json();
   } catch (error) {
-    console.error("Error fetching recipes:", error);
+    console.error(error);
+    return [];
   }
-}
+};
 
 function renderRecipeBox(recipe) {
+  console.log("repceptas", recipe);
+
   const addRecipeBox = recipeBoxTemplate.content.cloneNode(true);
   addRecipeBox.querySelector("[data-recipe-name]").textContent = recipe.name;
   addRecipeBox.querySelector("[data-recipe-type]").textContent = recipe.type;
-  console.log(recipe);
   addRecipeBox.querySelector("[data-recipe-calories]").textContent =
     recipe.calories;
   let ingredientList = addRecipeBox.querySelector(
@@ -25,7 +30,7 @@ function renderRecipeBox(recipe) {
   const editButton = addRecipeBox.querySelector("[data-edit-button]");
   const deleteButton = addRecipeBox.querySelector("[data-delete-button]");
 
-  for (i = 0; i <= recipe.ingredients.length - 1; i++) {
+  for (let i = 0; i <= recipe.ingredients.length - 1; i++) {
     let ingredientRow = document.createElement("div");
     ingredientRow.className = "ingredientRow";
     ingredientRow.id = i;
@@ -58,7 +63,6 @@ function renderRecipeBox(recipe) {
 
 const renderRecipes = async () => {
   recipeList.innerHTML = ""; // Clear previous recipes
-
   const recipes = await getData();
   recipes.forEach((recipe) => {
     renderRecipeBox(recipe);
@@ -67,11 +71,41 @@ const renderRecipes = async () => {
 
 document.addEventListener("DOMContentLoaded", renderRecipes);
 
+// const submitEditedRecipe = async (newRecipe) => {
+//   const recipes = await getData();
+//   const index = recipes.findIndex((recipe) => recipe.name === newRecipe.name);
+//   recipes[index] = newRecipe;
+//   console.log(recipes);
+//   // Convert the new recipe list to JSON format
+//   const jsonData = JSON.stringify(recipes, null, 2); // `null, 2` for pretty formatting
+//   await submitRecipe(jsonData);
+// };
+
 const submitEditedRecipe = async (newRecipe) => {
-  const recipes = await getData();
-  console.log("iš jasono", recipes);
-  console.log("naujas recipe", newRecipe);
+  try {
+    const recipes = await getData(); // Fetch current recipes
+    const index = recipes.findIndex((recipe) => recipe.name === newRecipe.name);
+
+    if (index !== -1) {
+      recipes[index] = newRecipe; // Update the recipe
+      const jsonData = JSON.stringify(recipes, null, 2); // Convert to JSON format
+
+      await submitRecipe(jsonData, "Update"); // Submit JSON data
+
+      // Optionally update the UI without reloading
+      document.getElementById("recipe-list").innerHTML = ""; // Clear the current list
+      renderRecipes(recipes); // Re-render updated recipes
+
+      console.log("Recipe updated successfully.");
+    } else {
+      console.error("Recipe not found.");
+    }
+  } catch (error) {
+    console.error("Error updating recipe:", error);
+  }
 };
+
+export default submitEditedRecipe;
 
 const createInput = (type, name, value, dataAttr) => {
   return `<input type="${type}" name="${name}" value="${value}" ${dataAttr} />`;
@@ -132,7 +166,11 @@ const replaceButton = (oldButton, newButtonText, onClickHandler) => {
   newButton.id = "saveButton";
   newButton.innerText = newButtonText;
   oldButton.parentNode.replaceChild(newButton, oldButton);
-  newButton.addEventListener("click", onClickHandler);
+  newButton.addEventListener("click", (event) => {
+    console.log("Button clicked");
+    event.preventDefault(); // Prevent default behavior
+    onClickHandler(); // Your custom logic here
+  });
 };
 
 const editRecipe = (recipe, type, calories, ingredients, editButton) => {

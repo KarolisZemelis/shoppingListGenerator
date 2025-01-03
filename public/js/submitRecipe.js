@@ -1,4 +1,6 @@
+import submitRecipe from "./utils.js";
 const recipeForm = document.querySelector("[data-form]");
+
 const addIngredientBtn = document.querySelector("[data-form-addIngredientBtn]");
 const removeIngredientBtn = document.querySelector(
   "[data-form-removeIngredientBtn]"
@@ -10,29 +12,29 @@ const addIngredientRowTemplate = document.querySelector(
   "[data-form-ingredient]"
 );
 
-const submitRecipe = (recipe) => {
-  fetch("http://localhost:3000/api/recipes", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(recipe),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("Failed to save the recipe.");
-      }
-    })
-    .then((data) => {
-      console.log(data.message);
-      window.location.reload(); // Force reload after successful submission
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+// const submitRecipe = (recipe) => {
+//   fetch("http://localhost:3000/api/recipes", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(recipe),
+//   })
+//     .then((response) => {
+//       if (response.ok) {
+//         return response.json();
+//       } else {
+//         throw new Error("Failed to save the recipe.");
+//       }
+//     })
+//     .then((data) => {
+//       console.log(data.message);
+//       window.location.reload(); // Force reload after successful submission
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// };
 
 function formIngredientObject(ingredients) {
   let ingredientObject = []; // Array to hold all ingredient data
@@ -79,5 +81,5 @@ recipeSubmitBtn.addEventListener("click", (_) => {
     ingredients: ingredients,
   };
 
-  submitRecipe(recipeObject);
+  submitRecipe(recipeObject, "new"); // Call submitRecipe with the recipeObject
 });

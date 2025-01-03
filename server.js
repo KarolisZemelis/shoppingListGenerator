@@ -22,7 +22,6 @@ app.get("/", (req, res) => {
 // Endpoint to add a new recipe
 app.post("/api/recipes", (req, res) => {
   const newRecipe = req.body;
-
   // Read the existing JSON file
   fs.readFile(filePath, "utf8", (err, data) => {
     if (err) {
@@ -42,6 +41,36 @@ app.post("/api/recipes", (req, res) => {
 
     // Append the new recipe to the array
     recipes.push(newRecipe);
+
+    // Write the updated array back to the file
+    fs.writeFile(filePath, JSON.stringify(recipes, null, 2), (err) => {
+      if (err) {
+        console.error("Error writing to the file:", err);
+        return res.status(500).send({ message: "Could not save recipe" });
+      }
+
+      res.status(201).send({ message: "Recipe saved successfully!" });
+    });
+  });
+});
+
+app.post("/api/recipesUpdate", (req, res) => {
+  console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+  const recipes = req.body;
+
+  // Read the existing JSON file
+  fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading the file:", err);
+      return res.status(500).send({ message: "Server error" });
+    }
+    if (data) {
+      try {
+      } catch (err) {
+        console.error("Error parsing JSON:", err);
+        return res.status(500).send({ message: "Invalid JSON format" });
+      }
+    }
 
     // Write the updated array back to the file
     fs.writeFile(filePath, JSON.stringify(recipes, null, 2), (err) => {
