@@ -22,7 +22,6 @@ const submitRecipe = (recipe, argument) => {
         console.error(error);
       });
   } else {
-    console.log("tureciau buti else");
     fetch("http://localhost:3000/api/recipesUpdate", {
       method: "POST",
       headers: {
