@@ -17,8 +17,6 @@ const getData = async () => {
 };
 
 function renderRecipeBox(recipe) {
-  console.log("repceptas", recipe);
-
   const addRecipeBox = recipeBoxTemplate.content.cloneNode(true);
   addRecipeBox.querySelector("[data-recipe-name]").textContent = recipe.name;
   addRecipeBox.querySelector("[data-recipe-type]").textContent = recipe.type;
@@ -71,16 +69,6 @@ const renderRecipes = async () => {
 
 document.addEventListener("DOMContentLoaded", renderRecipes);
 
-// const submitEditedRecipe = async (newRecipe) => {
-//   const recipes = await getData();
-//   const index = recipes.findIndex((recipe) => recipe.name === newRecipe.name);
-//   recipes[index] = newRecipe;
-//   console.log(recipes);
-//   // Convert the new recipe list to JSON format
-//   const jsonData = JSON.stringify(recipes, null, 2); // `null, 2` for pretty formatting
-//   await submitRecipe(jsonData);
-// };
-
 const submitEditedRecipe = async (newRecipe) => {
   try {
     const recipes = await getData(); // Fetch current recipes
@@ -88,9 +76,9 @@ const submitEditedRecipe = async (newRecipe) => {
 
     if (index !== -1) {
       recipes[index] = newRecipe; // Update the recipe
-      const jsonData = JSON.stringify(recipes, null, 2); // Convert to JSON format
+      // const jsonData = JSON.stringify(recipes, null, 2); // Convert to JSON format
 
-      await submitRecipe(jsonData, "Update"); // Submit JSON data
+      await submitRecipe(recipes, "Update"); // Submit JSON data
 
       // Optionally update the UI without reloading
       document.getElementById("recipe-list").innerHTML = ""; // Clear the current list
@@ -104,8 +92,6 @@ const submitEditedRecipe = async (newRecipe) => {
     console.error("Error updating recipe:", error);
   }
 };
-
-export default submitEditedRecipe;
 
 const createInput = (type, name, value, dataAttr) => {
   return `<input type="${type}" name="${name}" value="${value}" ${dataAttr} />`;
